@@ -2,32 +2,36 @@
 <html lang="en">
 
 <head>
- <title>The bird encyclopedia</title>
+ <title>Couriers Directory</title>
 </head>
 
 <body>
-  <h1>The bird encyclopedia</h1>
+  <h1>Couriers Directory</h1>
   <!--
     This section of the document specifies the table that will
-    be used to display the list of birds and their description
+    be used to display the list of couriers and their details
    -->
   <table>
     <tr>
-      <th>Species</th>
-      <th>Description</th>
+      <th>Name</th>
+      <th>City</th>
+      <th>Work Hours</th>
     </tr>
-    <td>Pigeon</td>
-    <td>Common in cities</td>
+    <td>Raúl P.</td>
+    <td>Bogotá</td>
+    <td>10:00am-13:00pm</td>
     </tr>
   </table>
   <br/>
 
   <!--
     This section contains the form, that will be used to hit the
-    `POST /bird` API that we will build in the next section
+    `POST /couriers` API that we will build in the next section
    -->
   <form action="/couriers" method="post">
-    City:
+    Name:
+    <input type="text" name="full_name">
+    <br/> City:
     <input type="text" name="city">
     <br/> Work Hours:
     <input type="text" name="workHours">
@@ -37,41 +41,46 @@
 
   <!--
     Finally, the last section is the script that will
-    run on each page load to fetch the list of birds
+    run on each page load to fetch the list of couriers
     and add them to our existing table
    -->
   <script>
-    birdTable = document.querySelector("table")
+    courierTable = document.querySelector("table")
 
     /*
-    Use the browsers `fetch` API to make a GET call to /bird
-    We expect the response to be a JSON list of birds, of the
+    Use the browsers `fetch` API to make a GET call to /couriers
+    We expect the response to be a JSON list of couriers, of the
     form :
     [
-      {"species":"...","description":"..."},
-      {"species":"...","description":"..."}
+      {"name":"...","city":"...","workHours":"..."},
+      {"name":"...","city":"...","workHours":"..."}
     ]
     */
     fetch("/couriers")
       .then(response => response.json())
-      .then(birdList => {
+      .then(courierList => {
         //Once we fetch the list, we iterate over it
-        birdList.forEach(bird => {
+        courierList.forEach(courier => {
           // Create the table row
           row = document.createElement("tr")
 
           // Create the table data elements for the species and
 					// description columns
-          species = document.createElement("td")
-          species.innerHTML = bird.species
-          description = document.createElement("td")
-          description.innerHTML = bird.description
+          full_name = document.createElement("td")
+          full_name.innerHTML = courier.Name
+          city = document.createElement("td")
+          city.innerHTML = courier.City
+
+          workHours = document.createElement("td")
+          workHours.innerHTML = courier.WorkHours
 
           // Add the data elements to the row
-          row.appendChild(species)
-          row.appendChild(description)
+          row.appendChild(full_name)
+          row.appendChild(city)
+          row.append(workHours)
           // Finally, add the row element to the table itself
-          birdTable.appendChild(row)
+          courierTable.appendChild(row)
+          console.log(courier)
         })
       })
   </script>

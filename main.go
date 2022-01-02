@@ -1,8 +1,9 @@
 package main
 
-import(
+import (
 	"fmt"
 	"net/http"
+
 	"github.com/gorilla/mux"
 )
 
@@ -26,8 +27,8 @@ func newRouter() *mux.Router {
 	// with "/assets/", instead of the absolute route itself
 	r.PathPrefix("/assets/").Handler(staticFileHandler).Methods("GET")
 
-	r.HandleFunc("/courier", getCourierHandler).Methods("GET")
-	r.HandleFunc("/courier", createCourierHandler).Methods("POST")
+	r.HandleFunc("/couriers", getCourierHandler).Methods("GET")
+	r.HandleFunc("/couriers", createCourierHandler).Methods("POST")
 	return r
 }
 

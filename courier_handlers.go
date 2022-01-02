@@ -1,12 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
-	"encoding/json"
+
 )
 
 type Courier struct {
+	Name string `json: "full_name"`
 	City string `json: "city"`
 	WorkHours string `json: "workHours"`
 }
@@ -45,6 +47,7 @@ func createCourierHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get the information about the courier from the form info
+	courier.Name = r.Form.Get("full_name")
 	courier.City = r.Form.Get("city")
 	courier.WorkHours = r.Form.Get("workHours")
 
