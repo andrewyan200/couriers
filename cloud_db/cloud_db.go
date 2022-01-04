@@ -22,6 +22,10 @@ type Courier struct {
 
 // Exported functions/variables in Go are capitalizedbo 
 func Query() []Courier {
+	//Logging the time
+	dt := time.Now()
+	fmt.Println(dt.String())
+	
 	//Connect to AWS RDS service via the DSN (Database Source Name)
 	//Note here we use a .env file and godotenv package to obfuscate the AWS RDS DSN
 	err := godotenv.Load()
@@ -152,6 +156,10 @@ func Query_param(name string, city string, workHours string) []Courier{
 }
 
 func Post_request(name string, city string, workHours string) {
+	//Logging the time
+	dt := time.Now()
+	fmt.Println(dt.String())
+
 	//Note here we use a .env file and godotenv package to obfuscate the AWS RDS DSN
 	err := godotenv.Load()
   if err != nil {
