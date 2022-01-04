@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 
 var couriers []Courier
 
-func getCourierHandler(w http.ResponseWriter, r * http.Request) {
+func getCourierHandlerLocal(w http.ResponseWriter, r * http.Request) {
 	//convert courier variable to json
 	courierListBytes, err := json.Marshal(couriers)
 
@@ -24,7 +24,7 @@ func getCourierHandler(w http.ResponseWriter, r * http.Request) {
 
 }
 
-func createCourierHandler(w http.ResponseWriter, r *http.Request) {
+func createCourierHandlerLocal(w http.ResponseWriter, r *http.Request) {
 	// Create a new instance Courier
 	courier := Courier{}
 

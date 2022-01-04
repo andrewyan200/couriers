@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
@@ -14,22 +14,23 @@ type Courier struct {
 	WorkHours string `json: "workHours"`
 }
 
-func getCourierHandlerCloud(w http.ResponseWriter, r * http.Request) {
-	//convert courier variable to json
+func GetCourierHandler(w http.ResponseWriter, r * http.Request) {
+	//fetch couriers from cloud database
+	couriers := cloud_db.Query()
 	courierListBytes, err := json.Marshal(couriers)
 
-	//if error, print to console + display server error
 	if err != nil {
 		fmt.Println(fmt.Errorf("Error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	
 	// If all goes well, write the JSON list of couriers to the response
 	w.Write(courierListBytes)
 
 }
 
-func createCourierHandlerCloud(w http.ResponseWriter, r *http.Request) {
+func CreateCourierHandler(w http.ResponseWriter, r *http.Request) {
 	// Create a new instance Courier
 	courier := Courier{}
 
@@ -50,8 +51,8 @@ func createCourierHandlerCloud(w http.ResponseWriter, r *http.Request) {
 	courier.City = r.Form.Get("city")
 	courier.WorkHours = r.Form.Get("workHours")
 
-	// Append our existing list of couriers with a new entry
-	couriers = append(couriers, courier)
+	//Post to the cloud database the received info
+	cloud_db.Post_request(courier.Name, courier.City, courier.WorkHours)
 
 	//Finally, we redirect the user to the original HTMl page
 	// (located at `/assets/`), using the http libraries `Redirect` method

@@ -27,8 +27,8 @@ func newRouter() *mux.Router {
 	// with "/assets/", instead of the absolute route itself
 	r.PathPrefix("/assets/").Handler(staticFileHandler).Methods("GET")
 
-	r.HandleFunc("/couriers", getCourierHandler).Methods("GET")
-	r.HandleFunc("/couriers", createCourierHandler).Methods("POST")
+	r.HandleFunc("/couriers", handlers.GetCourierHandler).Methods("GET")
+	r.HandleFunc("/couriers", handlers.CreateCourierHandler).Methods("POST")
 	return r
 }
 
@@ -39,10 +39,11 @@ func main() {
 	
 	// new way to handle http connections using Mux. Does so by calling newRouter() constructor
 	r := newRouter()
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":80", r)
 
 }
 
+// Demo handler
 func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello World!")
 }

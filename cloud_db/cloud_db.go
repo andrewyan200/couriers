@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/andrewyan200/couriers/cloud_db"
+	"github.com/joho/godotenv"
 	"log"
 	"os"
 	"time"
@@ -21,10 +21,15 @@ type Courier struct {
 }
 
 // Exported functions/variables in Go are capitalizedbo 
-func Query() {
+func Query() []Courier {
 	//Connect to AWS RDS service via the DSN (Database Source Name)
-	//Note here we use a .env file to obfuscate the AWS RDS DSN
+	//Note here we use a .env file and godotenv package to obfuscate the AWS RDS DSN
+	err := godotenv.Load()
+  if err != nil {
+    log.Fatal("Error loading .env file")
+  }
 	cloud_database := os.Getenv("AWS_RDS_DSN")
+
 	db, err := sql.Open("pgx", cloud_database)
 	if err != nil {
 		log.Fatalf("could not connect to database: %v", err)
@@ -60,7 +65,7 @@ func Query() {
 		log.Fatalf("could not execute query %v", err)
 	}
 	
-	// create s slice of couriers
+	// create a slice of couriers
 	couriers := []Courier{}
 
 	// iterate over the returned rows
@@ -78,12 +83,20 @@ func Query() {
 	}
 	// print the length, and all the couriers
 	fmt.Printf("found %d couriers: %+v", len(couriers), couriers)
+	return couriers
 }
 
-func Query_param(name string, city string, workHours string) {
+func Query_param(name string, city string, workHours string) []Courier{
 	//Note here we use a .env file to obfuscate the AWS RDS DSN
+	//Note here we use a .env file and godotenv package to obfuscate the AWS RDS DSN
+	err := godotenv.Load()
+  if err != nil {
+    log.Fatal("Error loading .env file")
+  }
 	cloud_database := os.Getenv("AWS_RDS_DSN")
+
 	db, err := sql.Open("pgx", cloud_database)
+
 	if err != nil {
 		log.Fatalf("could not connect to database: %v", err)
 	}
@@ -135,13 +148,19 @@ func Query_param(name string, city string, workHours string) {
 	}
 	// print the length, and all the couriers
 	fmt.Printf("found %d couriers: %+v", len(couriers), couriers)
-
+	return couriers
 }
 
 func Post_request(name string, city string, workHours string) {
-	//Note here we use a .env file to obfuscate the AWS RDS DSN
+	//Note here we use a .env file and godotenv package to obfuscate the AWS RDS DSN
+	err := godotenv.Load()
+  if err != nil {
+    log.Fatal("Error loading .env file")
+  }
 	cloud_database := os.Getenv("AWS_RDS_DSN")
+
 	db, err := sql.Open("pgx", cloud_database)
+	
 	if err != nil {
 		log.Fatalf("could not connect to database: %v", err)
 	}
