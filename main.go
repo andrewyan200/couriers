@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/andrewyan200/couriers/handlers"
 	"net/http"
-
 	"github.com/gorilla/mux"
 )
 

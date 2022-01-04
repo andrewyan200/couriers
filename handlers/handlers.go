@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/andrewyan200/couriers/cloud_db"
 	"net/http"
 
 )
@@ -13,9 +14,7 @@ type Courier struct {
 	WorkHours string `json: "workHours"`
 }
 
-var couriers []Courier
-
-func getCourierHandler(w http.ResponseWriter, r * http.Request) {
+func getCourierHandlerCloud(w http.ResponseWriter, r * http.Request) {
 	//convert courier variable to json
 	courierListBytes, err := json.Marshal(couriers)
 
@@ -30,7 +29,7 @@ func getCourierHandler(w http.ResponseWriter, r * http.Request) {
 
 }
 
-func createCourierHandler(w http.ResponseWriter, r *http.Request) {
+func createCourierHandlerCloud(w http.ResponseWriter, r *http.Request) {
 	// Create a new instance Courier
 	courier := Courier{}
 
