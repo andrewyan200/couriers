@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"github.com/microcosm-cc/bluemonday"
 
 )
 
@@ -40,10 +41,12 @@ func createCourierHandlerLocal(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Get the information about the courier from the form info
-	courier.Name = r.Form.Get("full_name")
-	courier.City = r.Form.Get("city")
-	courier.WorkHours = r.Form.Get("workHours")
+	// Get the information about the courier from the form info and sanitize it 
+	p := bluemonday.UGCPolicy() // here we use the default policy UGCPolicy
+
+	courier.Name = p.Sanitize(r.Form.Get("full_name"))
+	courier.City = p.Sanitize(r.Form.Get("city"))
+	courier.WorkHours = p.Sanitize(r.Form.Get("workHours"))
 
 	// Append our existing list of couriers with a new entry
 	couriers = append(couriers, courier)

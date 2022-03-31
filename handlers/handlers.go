@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/andrewyan200/couriers/cloud_db"
+	"github.com/microcosm-cc/bluemonday"
 	"net/http"
 
 )
@@ -46,10 +47,11 @@ func CreateCourierHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Get the information about the courier from the form info
-	courier.Name = r.Form.Get("full_name")
-	courier.City = r.Form.Get("city")
-	courier.WorkHours = r.Form.Get("workHours")
+	// Get the information about the courier from the form info and sanitize it 
+	p := bluemonday.UGCPolicy() // here we use the default policy UGCPolicy
+	courier.Name = p.Sanitize(r.Form.Get("full_name"))
+	courier.City = p.Sanitize(r.Form.Get("city"))
+	courier.WorkHours = p.Sanitize(r.Form.Get("workHours"))
 
 	//Post to the cloud database the received info
 	cloud_db.Post_request(courier.Name, courier.City, courier.WorkHours)
