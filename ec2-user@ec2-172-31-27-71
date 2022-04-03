@@ -3,29 +3,35 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
+	"github.com/andrewyan200/couriers/cloud_db"
 	"github.com/microcosm-cc/bluemonday"
+	"net/http"
 
 )
 
-var couriers []Courier
+type Courier struct {
+	Name string `json: "full_name"`
+	City string `json: "city"`
+	WorkHours string `json: "workHours"`
+}
 
-func getCourierHandlerLocal(w http.ResponseWriter, r * http.Request) {
-	//convert courier variable to json
+func GetCourierHandler(w http.ResponseWriter, r * http.Request) {
+	//fetch couriers from cloud database
+	couriers := cloud_db.Query()
 	courierListBytes, err := json.Marshal(couriers)
 
-	//if error, print to console + display server error
 	if err != nil {
 		fmt.Println(fmt.Errorf("Error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	
 	// If all goes well, write the JSON list of couriers to the response
 	w.Write(courierListBytes)
 
 }
 
-func createCourierHandlerLocal(w http.ResponseWriter, r *http.Request) {
+func CreateCourierHandler(w http.ResponseWriter, r *http.Request) {
 	// Create a new instance Courier
 	courier := Courier{}
 
@@ -42,14 +48,13 @@ func createCourierHandlerLocal(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get the information about the courier from the form info and sanitize it 
-	p := bluemonday.StrictPolicy() // here we use the default policy UGCPolicy
-
+	p := bluemonday.UGCPolicy() // here we use the default policy UGCPolicy
 	courier.Name = p.Sanitize(r.Form.Get("full_name"))
 	courier.City = p.Sanitize(r.Form.Get("city"))
 	courier.WorkHours = p.Sanitize(r.Form.Get("workHours"))
 
-	// Append our existing list of couriers with a new entry
-	couriers = append(couriers, courier)
+	//Post to the cloud database the received info
+	cloud_db.Post_request(courier.Name, courier.City, courier.WorkHours)
 
 	//Finally, we redirect the user to the original HTMl page
 	// (located at `/assets/`), using the http libraries `Redirect` method
