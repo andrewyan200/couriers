@@ -69,12 +69,12 @@
           // Create the table data elements for the species and
 					// description columns
           full_name = document.createElement("td")
-          full_name.innerHTML = courier.Name
+          full_name.innerHTML = courier.Name.replace(/<[^>]+>/g, '')
           city = document.createElement("td")
-          city.innerHTML = courier.City
+          city.innerHTML = courier.City.replace(/<[^>]+>/g, '')
 
           workHours = document.createElement("td")
-          workHours.innerHTML = courier.WorkHours
+          workHours.innerHTML = courier.WorkHours.replace(/<[^>]+>/g, '')
 
           // Add the data elements to the row
           row.appendChild(full_name)

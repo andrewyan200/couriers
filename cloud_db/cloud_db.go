@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/joho/godotenv"
-	"github.com/microcosm-cc/bluemonday"
 	"log"
 	"os"
 	"time"
@@ -191,14 +190,13 @@ func Post_request(name string, city string, workHours string) {
 	// Connection Lifetime
 	db.SetConnMaxLifetime(30 * time.Second)
 
-	p := bluemonday.StrictPolicy() // here we use the default policy UGCPolicy
 	newCourier := Courier{
 		Name: name,
 		City: city,
 		WorkHours: workHours,
 	}
 
-	result, err := db.Exec("INSERT INTO courier_directory(full_name, city, \"workHours\") VALUES ($1, $2, $3)", p.Sanitize(newCourier.Name), p.Sanitize(newCourier.City), p.Sanitize(newCourier.WorkHours))
+	result, err := db.Exec("INSERT INTO courier_directory(full_name, city, \"workHours\") VALUES ($1, $2, $3)", newCourier.Name, newCourier.City, newCourier.WorkHours)
 	if err != nil {
 		log.Fatalf("could not insert row: %v", err)
 	}
