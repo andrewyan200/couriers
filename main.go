@@ -5,6 +5,7 @@ import (
 	"github.com/andrewyan200/couriers/handlers"
 	"net/http"
 	"github.com/gorilla/mux"
+	// "github.com/microcosm-cc/bluemonday"
 )
 
 // Route construction function
@@ -40,6 +41,9 @@ func main() {
 	// new way to handle http connections using Mux. Does so by calling newRouter() constructor
 	r := newRouter()
 	http.ListenAndServe(":80", r)
+	// p := bluemonday.StrictPolicy()
+	// html := p.Sanitize("<div onmouseover=\"alert('Test')\">Mouseover test</div> ")
+	// fmt.Println(html)
 
 }
 
