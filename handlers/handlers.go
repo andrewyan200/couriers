@@ -48,13 +48,13 @@ func CreateCourierHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get the information about the courier from the form info and sanitize it 
-	p := bluemonday.StrictPolicy() // here we use the default policy UGCPolicy
+	p := bluemonday.StrictPolicy() // here we use the default policy StrictPolicy
 	courier.Name = p.Sanitize(r.Form.Get("full_name"))
 	courier.City = p.Sanitize(r.Form.Get("city"))
 	courier.WorkHours = p.Sanitize(r.Form.Get("workHours"))
 
 	//Post to the cloud database the received info
-	cloud_db.Post_request(courier.Name, courier.City, courier.WorkHours)
+	cloud_db.Post_request(p.Sanitize(courier.Name), p.Sanitize(courier.City), p.Sanitize(courier.WorkHours))
 
 	//Finally, we redirect the user to the original HTMl page
 	// (located at `/assets/`), using the http libraries `Redirect` method

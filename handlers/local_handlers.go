@@ -42,7 +42,7 @@ func createCourierHandlerLocal(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get the information about the courier from the form info and sanitize it 
-	p := bluemonday.StrictPolicy() // here we use the default policy UGCPolicy
+	p := bluemonday.StrictPolicy() // here we use the default policy StrictPolicy
 
 	courier.Name = p.Sanitize(r.Form.Get("full_name"))
 	courier.City = p.Sanitize(r.Form.Get("city"))
